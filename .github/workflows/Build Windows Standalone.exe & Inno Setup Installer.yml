@@ -30,7 +30,7 @@ jobs:
 
       - name: Compile Inno Setup Installer (LivingNotchBongoCat_Setup.exe)
         run: |
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer\LivingNotchBongoCat.iss"
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "C:\Users\Doran Sukses\Downloads\LivingNotchBongoCat_v3_Release_Package\installer\LivingNotchBongoCat.iss"
 
       - name: Upload Compiled Installers & Standalone Executable
         uses: actions/upload-artifact@v4
