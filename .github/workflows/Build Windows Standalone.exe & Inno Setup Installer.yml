@@ -1,0 +1,41 @@
+name: Build Windows Standalone .exe & Inno Setup Installer
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust Toolchain (MSVC x86_64)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install Frontend Dependencies
+        run: npm install
+
+      - name: Build Production Tauri Application (LivingNotchBongoCat.exe)
+        run: npm run tauri build
+
+      - name: Compile Inno Setup Installer (LivingNotchBongoCat_Setup.exe)
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer\LivingNotchBongoCat.iss"
+
+      - name: Upload Compiled Installers & Standalone Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LivingNotchBongoCat-Windows-Release
+          path: |
+            installer/Output/LivingNotchBongoCat_Setup.exe
+            src-tauri/target/release/LivingNotchBongoCat.exe
